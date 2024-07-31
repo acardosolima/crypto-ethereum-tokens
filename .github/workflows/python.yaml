@@ -27,7 +27,7 @@ jobs:
 
     - name: Run tests
       run: |
-        coverage run -m pytest tests
+        coverage run -m pytest dev/tests prod/tests
 
   run-linters:
     name: Run linters
