@@ -1,6 +1,7 @@
 # Crypto Ethereum Tokens Pipeline
 
 ## Table of contents
+
 [Setting up](#setting-up)
 [Contributors](#contributors)
 
