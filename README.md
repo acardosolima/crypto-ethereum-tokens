@@ -52,7 +52,11 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} --member "serviceAccount:py
 
 
 ### Local environment setup
-1. Choose a Kubernetes solution to start the local environment:
+1. Install [Docker Engine](https://docs.docker.com/engine/install/) and check if it is running
+```
+docker --version
+```
+2. Install one of the following Kubernetes solutions to start local environment:
     - [Minikube](https://k8s-docs.netlify.app/en/docs/tasks/tools/install-minikube/)
     - [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
 
