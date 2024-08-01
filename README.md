@@ -2,7 +2,9 @@
 This project aims to create a data pipeline using Airflow to ingest dataset from Google Bigquery to a PostgreSQL database. This stack will run in a local environment using Kubernetes.
 
 Project: bigquery-public-data
+
 Dataset: crypto_ethereum
+
 Table: tokens
 
 ## Table of contents
@@ -47,6 +49,7 @@ export GOOGLE_APPLICATION_CREDENTIALS=~/key.json
 ```
 gcloud projects add-iam-policy-binding ${PROJECT_ID} --member "serviceAccount:python-bigquery-sa@${PROJECT_ID}.iam.gserviceaccount.com" --role "roles/bigquery.user"
 ```
+
 
 ### Local environment setup
 1. Choose a Kubernetes solution to start the local environment:
