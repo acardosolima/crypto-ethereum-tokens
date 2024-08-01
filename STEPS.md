@@ -40,3 +40,7 @@ chegando no banco Postgres
 ### Criar tabela no postgres
 1. Utilizar psycopg2 para conexão no postgres 
 1. Utilizar dll gerado pela query ao "bigquery-public-data.crypto_ethereum.INFORMATION_SCHEMA.TABLES" para criar a tabela
+
+### Lendo dados do bigquery
+1. Usar load_credentials_from_file da lib google.auth para se autenticar
+1. Lib google.cloud.bigquery tem função assíncrona para realizar a query e permite salvar em dataframe *** precisa do pandas e db-dtypes ***

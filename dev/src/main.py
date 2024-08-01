@@ -10,17 +10,15 @@ def read_bigquery():
 
     query = """
         SELECT
-            table_name, ddl
+            *
         FROM
-            `bigquery-public-data`.crypto_ethereum.INFORMATION_SCHEMA.TABLES
-        WHERE
-            table_name = 'tokens';
+            bigquery-public-data.crypto_ethereum.tokens
+        LIMIT 20;
     """
 
-    results = client.query(query)
+    results = client.query_and_wait(query).to_dataframe()
 
-    for row in results:
-        print(row)
+    return results
 
 def access_postgres():
     db_host = "localhost"
@@ -47,6 +45,10 @@ def query_postgres():
 
         cur.close()
 
+def main():
+    res = read_bigquery()
+    print(res)
+
 if __name__ == "__main__":
-    read_bigquery()
-    query_postgres()
+    main()
+    # query_postgres()
