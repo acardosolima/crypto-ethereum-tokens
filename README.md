@@ -1,4 +1,9 @@
 # Crypto Ethereum Tokens Pipeline
+This project aims to create a data pipeline using Airflow to ingest dataset from Google Bigquery to a PostgreSQL database. This stack will run in a local environment using Kubernetes.
+
+Project: bigquery-public-data
+Dataset: crypto_ethereum
+Table: tokens
 
 ## Table of contents
 
