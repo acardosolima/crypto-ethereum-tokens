@@ -1,0 +1,32 @@
+name: Terraform test
+
+on:
+  push:
+    branches-ignore: [master, develop]
+  pull_request:
+    branches: [master, develop]
+
+jobs:
+  validate:
+    name: Validate terraform configuration
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Terraform validate
+        uses: dflook/terraform-validate@v1
+        with:
+          path: src/terraform
+
+  fmt-check:
+    name: Check formatting of terraform files
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: terraform fmt
+        uses: dflook/terraform-fmt-check@v1
+        with:
+          path: src/terraform
