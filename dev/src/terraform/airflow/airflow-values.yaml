@@ -1,3 +1,42 @@
+# Airflow executor
+# One of: LocalExecutor, LocalKubernetesExecutor, CeleryExecutor, KubernetesExecutor, CeleryKubernetesExecutor
+# executor: "LocalKubernetesExecutor"
+
+# Airflow database & redis config
+# # data:
+#   # If secret names are provided, use those secrets
+#   # metadataSecretName: airflow-postgresql-secret
+
+# # Flask secret key for Airflow Webserver: `[webserver] secret_key` in airflow.cfg
+# # webserverSecretKey: ~
+webserverSecretKeySecretName: webserver-secret-key
+
+# Git sync
+dags:
+  # Where dags volume will be mounted. Works for both persistence and gitSync.
+  # If not specified, dags mount path will be set to $AIRFLOW_HOME/dags
+  persistence:
+    # Enable persistent volume for storing dags
+    enabled: false
+
+  gitSync:
+    enabled: true
+
+    # git repo clone url
+    # https example: https://github.com/apache/airflow.git
+    repo: https://github.com/acardosolima/st-contratos-eth.git
+    branch: master
+    # subpath within the repo where dags are located
+    # should be "" if dags are at repo root
+    subPath: ""
+
+    # interval between git sync attempts in seconds
+    # high values are more likely to cause DAGs to become out of sync between different components
+    # low values cause more traffic to the remote git repository
+    # Go-style duration string (e.g. "100ms" or "0.1s" = 100ms).
+    # For backwards compatibility, wait will be used if it is specified.
+    period: 200s
+
 # Job configurations
 createUserJob:
   useHelmHooks: false
@@ -6,22 +45,3 @@ createUserJob:
 migrateDatabaseJob:
   useHelmHooks: false
   applyCustomEnv: false
-
-  apiVersion: networking.k8s.io/v1
-  kind: Ingress
-  metadata:
-    name: example
-    namespace: foo
-  spec:
-    ingressClassName: nginx
-    rules:
-      - host: www.example.com
-        http:
-          paths:
-            - pathType: Prefix
-              backend:
-                service:
-                  name: exampleService
-                  port:
-                    number: 80
-              path: /
