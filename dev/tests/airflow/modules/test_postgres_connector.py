@@ -1,5 +1,4 @@
 import unittest
-from psycopg2 import DatabaseError, OperationalError
 import dev.src.airflow.modules.postgres_connector as pg
 
 
