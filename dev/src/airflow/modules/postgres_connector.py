@@ -2,63 +2,77 @@ from psycopg2 import connect
 from psycopg2 import DatabaseError
 from psycopg2 import extensions
 
-def get_postgres_connector(
-        db_database: str,
-        db_user: str,
-        db_password: str,
-        db_host: str = "localhost") -> extensions.connection:
 
-    try:
-        with connect(
-            host=db_host,
-            database=db_database,
-            user=db_user,
-            password=db_password
-            ) as conn:
+class PostgreSQLConnector:
 
-            return conn
+    def __init__(
+            self, host: str = "localhost",
+            database: str = "postgres",
+            user: str = "postgres",
+            password: str = "postgres",
+            port=5432) -> None:
         
-    except DatabaseError as e:
-        print(f"Could not connect to database: {e}")
+        try:
+            self.conn = connect(
+                host=host,
+                database=database,
+                user=user,
+                password=password,
+                port=port)
 
-def execute_statement(query: str, postgres_client: extensions.connection) -> bool:
+            self.cur = self.conn.cursor()
+            
+        except DatabaseError as d:
+            print(f"{type(d).__name__:} {d}")
 
-    try:
-        cur = postgres_client.cursor()
-        cur.execute(query)
 
-        postgres_client.commit()
+    def execute_statement(self, query: str) -> bool:
 
-        cur.close()
+        try:
+            self.cur.execute(query)
 
-        return True
+            self.conn.commit()
 
-    except Exception as e:
-        print(f"Could not perform operation on database: {e}")
+            return True
 
-        return False
+        except Exception as d:
+            print(f"{type(d).__name__:} {d}")
 
-def query_database(query: str, postgres_client: extensions.connection):
-    try:
-        cur = postgres_client.cursor()
-        cur.execute(query)
+            return False
 
-        res = cur.fetchmany(10)
-        cur.close()
+    def query_database(self, query: str):
+        try:
+            self.cur.execute(query)
 
-        return res
+            return self.cur.fetchall()
 
-    except Exception as e:
-        print(f"Could not perform operation on database: {e}")
+        except Exception as e:
+            print(f"{type(d).__name__:} {d}")
+
+    def close_connection(self):
+        self.cur.close()
+        self.conn.close()
 
 def main():
-    connector = get_postgres_connector(
-        db_database="crypto_ethereum",
-        db_user="root",
-        db_password="password"
+    connector = PostgreSQLConnector(
+        database="crypto_ethereum",
+        user="root",
+        password="password"        
     )
 
-    query = """
+    query1 = """
+        CREATE TABLE IF NOT EXISTS tokens(
+        address TEXT NOT NULL,
+        symbol TEXT,
+        name TEXT,
+        decimals TEXT,
+        total_supply TEXT,
+        block_timestamp TIMESTAMP NOT NULL,
+        block_number INTEGER NOT NULL,
+        block_hash TEXT NOT NULL);
+    """
+
+    query2 = """
         INSERT INTO tokens
         VALUES (
             '0x142362602f1b1ce711a9ea72a8089f49ef6e3021',
@@ -71,15 +85,15 @@ def main():
             '0x8f28059bebf9a4b55b80307ab34eeda2737a68fd38030c53ea376ee549c70cc0'
         )
     """
-    res = execute_statement(query, connector)
 
-    select = """
+    query3 = """
         SELECT * FROM tokens
-        LIMIT 10
+        LIMIT 2
     """
-    print(query_database(select, connector))
+    connector.execute_statement(query1)
+    connector.execute_statement(query2)
+    print(connector.query_database(query3))
 
-    connector.close()
 
 if __name__ == "__main__":
     main()
