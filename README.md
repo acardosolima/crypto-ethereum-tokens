@@ -56,9 +56,15 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} --member "serviceAccount:py
 ```
 docker --version
 ```
-2. Install one of the following Kubernetes solutions to start local environment:
-    - [Minikube](https://k8s-docs.netlify.app/en/docs/tasks/tools/install-minikube/)
-    - [Kind](https://kind.sigs.k8s.io/docs/user/quick-start/#installation)
+2. Install [Minikube](https://k8s-docs.netlify.app/en/docs/tasks/tools/install-minikube/) and start local cluster
+```
+minikube start
+```
+3. Execute installAll.sh to initialize both postgres and airflow deployment **use terragrunt maybe?**
+```
+bash installAll.sh    # If using Windows
+source installAll.sh  # if using Linux
+```
 
 
 ## Contributors
