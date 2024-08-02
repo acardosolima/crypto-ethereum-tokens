@@ -39,7 +39,7 @@ class PostgreSQLConnector:
                 user=user,
                 password=password,
                 port=port)
-            
+
             print(f"------------{self.conn}")
 
             self.cur = self.conn.cursor()

@@ -41,9 +41,9 @@ class TestPostgresConnector(unittest.TestCase):
          proper object if provided with right info
         """
         connector = pg.PostgreSQLConnector(
-        database="crypto_ethereum",
-        user="root",
-        password="password"
+            database="crypto_ethereum",
+            user="root",
+            password="password"
         )
 
         self.assertTrue(hasattr(connector, "conn"))
