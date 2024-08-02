@@ -46,9 +46,10 @@ def query_postgres():
         cur.close()
 
 def main():
-    res = read_bigquery()
-    print(res)
+    #res = read_bigquery()
+    #print(res)
+    access_postgres()
+    query_postgres()
 
 if __name__ == "__main__":
     main()
-    # query_postgres()
