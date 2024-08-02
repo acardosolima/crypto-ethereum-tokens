@@ -1,15 +1,15 @@
-# Airflow executor
-# One of: LocalExecutor, LocalKubernetesExecutor, CeleryExecutor, KubernetesExecutor, CeleryKubernetesExecutor
-# executor: "LocalKubernetesExecutor"
+# # Airflow executor
+# # One of: LocalExecutor, LocalKubernetesExecutor, CeleryExecutor, KubernetesExecutor, CeleryKubernetesExecutor
+# # executor: "CeleryExecutor"
 
-# Airflow database & redis config
+# # Airflow database & redis config
 # # data:
-#   # If secret names are provided, use those secrets
-#   # metadataSecretName: airflow-postgresql-secret
+# #   # If secret names are provided, use those secrets
+# #   metadataSecretName: airflow-postgresql-secret
 
-# # Flask secret key for Airflow Webserver: `[webserver] secret_key` in airflow.cfg
-# # webserverSecretKey: ~
-webserverSecretKeySecretName: webserver-secret-key
+# Flask secret key for Airflow Webserver: `[webserver] secret_key` in airflow.cfg
+webserverSecretKey: webserver-secret-key
+# webserverSecretKeySecretName: webserver-secret-key
 
 # Git sync
 dags:

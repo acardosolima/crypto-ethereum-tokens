@@ -1,6 +1,6 @@
 resource "kubernetes_namespace" "airflow" {
   metadata {
-    name = var.namespace
+    name = var.airflow_namespace
   }
 }
 resource "random_password" "webserver_generated_secret" {
@@ -21,7 +21,6 @@ resource "kubernetes_secret" "webserver_secret_key" {
 
   type = "Opaque"
 }
-
 
 resource "helm_release" "airflow" {
   name       = "airflow"

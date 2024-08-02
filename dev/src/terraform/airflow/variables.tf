@@ -10,7 +10,7 @@ variable "airflow_version" {
   default     = "1.15.0"
 }
 
-variable "namespace" {
+variable "airflow_namespace" {
   description = "The namespace to deploy Airflow"
   type        = string
   default     = "airflow"
