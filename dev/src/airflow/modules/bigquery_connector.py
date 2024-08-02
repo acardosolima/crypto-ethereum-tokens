@@ -2,8 +2,19 @@ import pandas as pd
 from google.cloud import bigquery
 from google.auth import load_credentials_from_file
 
+"""
+This module provides functions to deal with BigQuery connections.
+
+Includes functions to establish a connection and query a dataset.
+"""
 
 class BigQueryConnector:
+    """Deals with BigQuery connection and statements.
+
+    Attributes:
+        projectId: project id in GCP platform
+        client: a bigquery Client for connection
+    """
 
     def __read_credentials_file__(self, path: str) -> tuple:
         try:

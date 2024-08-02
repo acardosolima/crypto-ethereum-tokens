@@ -5,7 +5,7 @@ from google.auth.exceptions import DefaultCredentialsError
 
 class TestBigQueryConnector(unittest.TestCase):
     """
-    Tests the functionality of the HTTPConector class.
+    Tests the functionality of the BigQueryConnector class.
     """
 
     def test_blank_path(self) -> None:

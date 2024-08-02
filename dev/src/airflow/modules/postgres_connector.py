@@ -1,5 +1,5 @@
 from psycopg2 import connect
-from psycopg2 import DatabaseError
+from psycopg2 import DatabaseError, OperationalError
 
 """
 This module provides functions to deal with postgres connections.
@@ -10,6 +10,12 @@ and query a table.
 
 
 class PostgreSQLConnector:
+    """Deals with PostgreSQL connection and statements.
+
+    Attributes:
+        conn: connection client to Postgres with all auth info
+        cur:  cursor to execute statements against Postgres
+    """
 
     def __init__(
             self, host: str = "localhost",
@@ -17,7 +23,15 @@ class PostgreSQLConnector:
             user: str = "postgres",
             password: str = "postgres",
             port=5432) -> None:
+        """Initializes a PostgreSQL connector
 
+        Args:
+            host: database endpoint
+            database: database to connect to
+            user: which user will be used to authenticate
+            password: password of user
+            port: port of postgres database
+        """
         try:
             self.conn = connect(
                 host=host,
@@ -25,9 +39,13 @@ class PostgreSQLConnector:
                 user=user,
                 password=password,
                 port=port)
+            
+            print(f"------------{self.conn}")
 
             self.cur = self.conn.cursor()
 
+        except OperationalError as o:
+            print(f"{type(o).__name__:} {o}")
         except DatabaseError as d:
             print(f"{type(d).__name__:} {d}")
 
