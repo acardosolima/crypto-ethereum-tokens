@@ -2,6 +2,7 @@ import unittest
 import dev.src.airflow.modules.bigquery_connector as bq
 from google.auth.exceptions import DefaultCredentialsError
 
+
 class TestBigQueryConnector(unittest.TestCase):
     """
     Tests the functionality of the HTTPConector class.
@@ -27,7 +28,7 @@ class TestBigQueryConnector(unittest.TestCase):
         with self.assertRaises(DefaultCredentialsError):
             path = "/dev/test/blank_test"
             bq.BigQueryConnector(path)
-            
+
     def test_valid_path(self) -> None:
         """
         Tests if a valid path results in a sucessfull instantiation.

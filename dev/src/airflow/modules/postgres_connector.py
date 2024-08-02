@@ -1,6 +1,12 @@
 from psycopg2 import connect
 from psycopg2 import DatabaseError
-from psycopg2 import extensions
+
+"""
+This module provides functions to deal with postgres connections.
+
+Includes functions to establish a connection, execute a statement
+and query a table.
+"""
 
 
 class PostgreSQLConnector:
@@ -11,7 +17,7 @@ class PostgreSQLConnector:
             user: str = "postgres",
             password: str = "postgres",
             port=5432) -> None:
-        
+
         try:
             self.conn = connect(
                 host=host,
@@ -21,10 +27,9 @@ class PostgreSQLConnector:
                 port=port)
 
             self.cur = self.conn.cursor()
-            
+
         except DatabaseError as d:
             print(f"{type(d).__name__:} {d}")
-
 
     def execute_statement(self, query: str) -> bool:
 
@@ -47,17 +52,18 @@ class PostgreSQLConnector:
             return self.cur.fetchall()
 
         except Exception as e:
-            print(f"{type(d).__name__:} {d}")
+            print(f"{type(e).__name__:} {e}")
 
     def close_connection(self):
         self.cur.close()
         self.conn.close()
 
+
 def main():
     connector = PostgreSQLConnector(
         database="crypto_ethereum",
         user="root",
-        password="password"        
+        password="password"
     )
 
     query1 = """
