@@ -1,38 +1,45 @@
 import pandas as pd
 from google.cloud import bigquery
 from google.auth import load_credentials_from_file
+from google.auth.exceptions import DefaultCredentialsError
 
-
-def get_bigquery_client_from_file(path: str) -> bigquery.Client:
-
-    try:
-        cred, projectId = load_credentials_from_file(path)
-        client = bigquery.Client(project=projectId, credentials=cred)
-
-        return client
+class BigQueryConnector:
     
-    except Exception as e:
-        print(f"Error while trying to read provided path: {e}")
+    def __read_credentials_file__(self, path: str) -> tuple:
+        try:
+            res = load_credentials_from_file(path)
+            return res
 
-def query_dataframe_data(query: str, bigquery_client: bigquery.Client) -> pd.DataFrame:
+        except TypeError as t:
+            print(f"{type(t).__name__:} {t}")
 
-    try:
-        results = bigquery_client.query_and_wait(query)
-        return results.to_dataframe
-    except Exception as e:
-        print(f"Error while trying to query data from Bigquery: {e}")
+    def __init__(self, credentials_path: str =None) -> None:
+
+        cred, projectId = self.__read_credentials_file__(credentials_path)
+        self.client = bigquery.Client(project=projectId, credentials=cred)
+
+
+    def query_dataframe_data(self, query: str) -> pd.DataFrame:
+
+        try:
+            results = self.client.query_and_wait(query)
+            return results.to_dataframe()
+        
+        except Exception as e:
+            print(f"{type(e).__name__:} {e}")
 
 
 def main():
-    client = get_bigquery_client_from_file("dev/src/crypto-ethereum-bigquery-key.json")
-    
+    credentials_path = "dev/src/crypto-ethereum-bigquery-key.json"
+    connector = BigQueryConnector(credentials_path=credentials_path)
+
     query = """
         SELECT * FROM
             bigquery-public-data.crypto_ethereum.tokens
         LIMIT 20;
         """
 
-    df = query_dataframe_data(query, client)
+    df = connector.query_dataframe_data(query)
 
     print(df)
 
