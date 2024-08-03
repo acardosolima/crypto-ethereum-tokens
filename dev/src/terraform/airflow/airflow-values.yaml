@@ -9,32 +9,17 @@
 
 # Flask secret key for Airflow Webserver: `[webserver] secret_key` in airflow.cfg
 webserverSecretKey: webserver-secret-key
-# webserverSecretKeySecretName: webserver-secret-key
 
 # Git sync
 dags:
-  # Where dags volume will be mounted. Works for both persistence and gitSync.
-  # If not specified, dags mount path will be set to $AIRFLOW_HOME/dags
   persistence:
-    # Enable persistent volume for storing dags
     enabled: false
 
   gitSync:
     enabled: true
-
-    # git repo clone url
-    # https example: https://github.com/apache/airflow.git
     repo: https://github.com/acardosolima/st-contratos-eth.git
     branch: master
-    # subpath within the repo where dags are located
-    # should be "" if dags are at repo root
     subPath: ""
-
-    # interval between git sync attempts in seconds
-    # high values are more likely to cause DAGs to become out of sync between different components
-    # low values cause more traffic to the remote git repository
-    # Go-style duration string (e.g. "100ms" or "0.1s" = 100ms).
-    # For backwards compatibility, wait will be used if it is specified.
     period: 200s
 
 # Job configurations
