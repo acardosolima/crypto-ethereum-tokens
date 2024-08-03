@@ -20,7 +20,7 @@ dags:
     repo: https://github.com/acardosolima/st-contratos-eth.git
     branch: master
     subPath: ""
-    period: 200s
+    period: 20s
 
 # Job configurations
 createUserJob:
