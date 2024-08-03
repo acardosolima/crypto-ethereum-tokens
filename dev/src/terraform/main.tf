@@ -1,5 +1,5 @@
 module "postgresql" {
-  source    = "./modules/postgres"
+  source = "./modules/postgres"
 }
 
 # --------get clusterIP ip address
@@ -9,5 +9,5 @@ module "postgresql" {
 # ---------create connection in airflow type postgres
 
 module "airflow" {
-  source    = "./modules/airflow"
+  source = "./modules/airflow"
 }
