@@ -1,0 +1,32 @@
+# # Airflow executor
+# # One of: LocalExecutor, LocalKubernetesExecutor, CeleryExecutor, KubernetesExecutor, CeleryKubernetesExecutor
+# # executor: "CeleryExecutor"
+
+# # Airflow database & redis config
+# # data:
+# #   # If secret names are provided, use those secrets
+# #   metadataSecretName: airflow-postgresql-secret
+
+# Flask secret key for Airflow Webserver: `[webserver] secret_key` in airflow.cfg
+webserverSecretKey: webserver-secret-key
+
+# Git sync
+dags:
+  persistence:
+    enabled: false
+
+  gitSync:
+    enabled: true
+    repo: https://github.com/acardosolima/st-contratos-eth.git
+    branch: master
+    subPath: ""
+    period: 200s
+
+# Job configurations
+createUserJob:
+  useHelmHooks: false
+  applyCustomEnv: false
+
+migrateDatabaseJob:
+  useHelmHooks: false
+  applyCustomEnv: false
