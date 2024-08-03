@@ -14,7 +14,7 @@ default_args = {
 }
 
 dag = DAG(
-    'Ingest Tokens dataset',
+    'Ingest-tokens-dataset',
     description='Ingest data from bigquery-public-data.crypto_ethereum.tokens to PostgreSQL',
     default_args=default_args,
     schedule_interval='@daily',
