@@ -1,3 +1,4 @@
+import pandas as pd
 from datetime import timedelta
 from airflow import DAG
 from airflow.utils.dates import days_ago
@@ -11,7 +12,7 @@ default_args = {
     'email_on_failure': False,
     'email_on_retry': False,
     'retries': 1,
-    'retry_delay': timedelta(minutes=3),
+    'retry_delay': timedelta(minutes=1),
 }
 
 dag = DAG(
@@ -24,12 +25,18 @@ dag = DAG(
 )
 
 def query_tokens_table(**kwargs):
+    execution_date = kwargs['execution_date']
+    file_path = f"/tmp/query_results_{execution_date.strftime('%Y%m%d%H%M')}.csv"
+    
     hook = BigQueryHook(gcp_conn_id='bigquery_credentials', use_legacy_sql=True)
     conn = hook.get_conn()
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM [bigquery-public-data.crypto_ethereum.tokens] LIMIT 10")
-    result = cursor.fetchall()
-    return result
+    rows = cursor.fetchall()
+    df = pd.DataFrame(rows)
+    df.to_csv(file_path, index=False)
+    
+    return file_path
 
 start_task = PythonOperator(
     task_id='query_data',
