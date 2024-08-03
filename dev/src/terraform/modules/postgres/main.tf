@@ -17,3 +17,10 @@ resource "helm_release" "postgresql" {
 
   depends_on = [kubernetes_namespace.postgresql]
 }
+
+data "kubernetes_service" "postgresql" {
+  metadata {
+    name      = helm_release.postgresql.name
+    namespace = helm_release.postgresql.namespace
+  }
+}
