@@ -25,15 +25,3 @@ data "kubernetes_service" "postgresql" {
     namespace = helm_release.postgresql.namespace
   }
 }
-
-# Remember info regarding password in postgreSQL
-data "kubernetes_secret" "postgresql_secret" {
-  metadata {
-    name      = "postgresql"
-    namespace = "postgresql"
-  }
-}
-
-locals {
-  postgresql_password = base64decode(data.kubernetes_secret.postgresql_secret.data["postgresql-password"])
-}

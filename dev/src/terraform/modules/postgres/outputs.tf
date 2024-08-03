@@ -2,9 +2,3 @@
 output "postgresql_cluster_ip" {
   value = data.kubernetes_service.postgresql.spec[0].cluster_ip
 }
-
-# PostgreSQL password for user postgres
-output "postgresql_user_password" {
-  value = local.postgresql_password
-  sensitive = true
-}
