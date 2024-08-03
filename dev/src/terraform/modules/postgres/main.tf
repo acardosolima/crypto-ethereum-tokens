@@ -18,9 +18,22 @@ resource "helm_release" "postgresql" {
   depends_on = [kubernetes_namespace.postgresql]
 }
 
+# Remembers info regarding created service
 data "kubernetes_service" "postgresql" {
   metadata {
     name      = helm_release.postgresql.name
     namespace = helm_release.postgresql.namespace
   }
+}
+
+# Remember info regarding password in postgreSQL
+data "kubernetes_secret" "postgresql_secret" {
+  metadata {
+    name      = "postgresql"
+    namespace = "postgresql"
+  }
+}
+
+locals {
+  postgresql_password = base64decode(data.kubernetes_secret.postgresql_secret.data["postgresql-password"])
 }
