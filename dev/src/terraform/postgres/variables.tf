@@ -1,41 +1,25 @@
-variable "postgres_image" {
-  description = "Docker image for PostgreSQL"
+# Kubernetes variables
+variable "kubeconfig" {
+  description = "Path to the kubeconfig file"
   type        = string
-  default     = "postgres:16"
+  default     = "~/.kube/config"
 }
 
-variable "container_name" {
-  description = "Name of the PostgreSQL container"
+# PostgreSQL variables
+variable "postgres_version" {
+  description = "The version of the PostgreSQL Helm chart"
   type        = string
-  default     = "postgres_db"
+  default     = "15.5.20"
 }
 
-variable "postgres_user" {
-  description = "PostgreSQL user"
+variable "postgresql_namespace" {
+  description = "The namespace to deploy Postgres"
   type        = string
-  default     = "root"
+  default     = "postgresql"
 }
 
-variable "postgres_password" {
-  description = "PostgreSQL user password"
-  type        = string
-  default     = "password"
-}
-
-variable "postgres_db" {
-  description = "PostgreSQL database name"
+variable "db_name" {
+  description = "Name of default database to be used"
   type        = string
   default     = "crypto_ethereum"
-}
-
-variable "host_port" {
-  description = "Host port for PostgreSQL"
-  type        = number
-  default     = 5432
-}
-
-variable "container_port" {
-  description = "Container port for PostgreSQL"
-  type        = number
-  default     = 5432
 }

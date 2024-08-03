@@ -1,20 +1,19 @@
-# Creates local postgres instance to persist ethereum data
-resource "docker_image" "postgres" {
-  name = var.postgres_image
+# Defines PostgreSQL namespace
+resource "kubernetes_namespace" "postgresql" {
+  metadata {
+    name = var.postgresql_namespace
+  }
 }
 
-resource "docker_container" "postgres" {
-  name  = var.container_name
-  image = docker_image.postgres.name
+# Installs PostgreSQL via helm
+resource "helm_release" "postgresql" {
+  name       = "postgresql"
+  namespace  = kubernetes_namespace.postgresql.metadata[0].name
+  repository = "https://charts.bitnami.com/bitnami"
+  chart      = "postgresql"
+  version    = var.postgres_version
 
-  ports {
-    internal = var.container_port
-    external = var.host_port
-  }
+  values = [file("${path.module}/postgres-values.yaml")]
 
-  env = [
-    "POSTGRES_USER=${var.postgres_user}",
-    "POSTGRES_PASSWORD=${var.postgres_password}",
-    "POSTGRES_DB=${var.postgres_db}"
-  ]
+  depends_on = [kubernetes_namespace.postgresql]
 }

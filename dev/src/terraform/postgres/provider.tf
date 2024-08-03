@@ -1,12 +1,22 @@
 terraform {
   required_providers {
-    docker = {
-      source  = "kreuzwerker/docker"
-      version = "~> 3.0"
+    helm = {
+      source  = "hashicorp/helm"
+      version = "~> 2.14"
+    }
+    kubernetes = {
+      source  = "hashicorp/kubernetes"
+      version = "~> 2.16"
     }
   }
-
-  required_version = ">= 1.4"
 }
 
-provider "docker" {}
+provider "kubernetes" {
+  config_path = var.kubeconfig
+}
+
+provider "helm" {
+  kubernetes {
+    config_path = var.kubeconfig
+  }
+}
