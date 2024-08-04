@@ -34,4 +34,14 @@ data "kubernetes_service" "postgresql" {
     name      = helm_release.postgresql.name
     namespace = helm_release.postgresql.namespace
   }
+
+  depends_on = [ helm_release.postgresql ]
+}
+
+# 
+data "kubernetes_secret" "postgresql" {
+  metadata {
+    name      = "postgresql"
+    namespace = kubernetes_namespace.postgresql.metadata[0].name
+  }
 }

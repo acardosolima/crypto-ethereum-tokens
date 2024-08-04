@@ -1,7 +1,16 @@
 #! /bin/bash
 
-minikube start
+TERRAFORM_DIR="dev/src/terraform/"
+DESTROY_FLAG=$1
 
-terraform -chdir=dev/src/terraform/ init 
-terraform -chdir=dev/src/terraform/ validate 
-terraform -chdir=dev/src/terraform/ apply -auto-approve
+#minikube start
+
+if [ "$DESTROY_FLAG" == "destroy" ]; then
+    terraform -chdir=$TERRAFORM_DIR destroy --auto-approve
+fi
+
+terraform -chdir=$TERRAFORM_DIR init 
+terraform -chdir=$TERRAFORM_DIR validate 
+terraform -chdir=$TERRAFORM_DIR apply -auto-approve
+
+#export POSTGRES_PASSWORD=$(kubectl get secret --namespace postgresql postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)

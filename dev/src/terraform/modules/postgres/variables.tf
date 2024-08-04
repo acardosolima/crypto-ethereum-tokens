@@ -24,6 +24,12 @@ variable "db_name" {
   default     = "crypto_ethereum"
 }
 
+variable "table_name" {
+  description = "Name of default database to be created"
+  type        = string
+  default     = "crypto_ethereum"
+}
+
 variable "num_replicas" {
   description = "Number of postgresql replicas"
   type        = number
