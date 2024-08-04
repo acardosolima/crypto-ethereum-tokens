@@ -13,6 +13,7 @@ Table: tokens
   - [Table of contents](#table-of-contents)
   - [Setting up](#setting-up)
     - [Google Cloud setup](#google-cloud-setup)
+    - [Install required programs](#install-required-programs)
     - [Local environment setup](#local-environment-setup)
   - [Contributors](#contributors)
 
@@ -51,7 +52,7 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} --member "serviceAccount:py
 ```
 
 
-### Local environment setup
+### Install required programs
 1. Install [Docker Engine](https://docs.docker.com/engine/install/) and check if it is running
 ```
 docker --version
@@ -60,10 +61,23 @@ docker --version
 ```
 minikube start
 ```
-3. Execute installAll.sh to initialize both postgres and airflow deployment **use terragrunt maybe?**
+3. Install [Terraform](https://developer.hashicorp.com/terraform/install) and check if it's available
 ```
-bash installAll.sh    # If using Windows
-source installAll.sh  # if using Linux
+terraform -version
+```
+
+### Local environment setup
+1. Clone repo and install python dependencies within virtual environment
+```
+git clone https://github.com/acardosolima/crypto-ethereum-tokens.git
+cd crypto-ethereum-tokens/
+python -m venv .env
+source .env/Scripts\activate
+pip install -r requirements.txt
+```
+1. Execute setup.sh to initialize both postgres and airflow deployment
+```
+source setup.sh
 ```
 
 
