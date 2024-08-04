@@ -4,6 +4,6 @@ output "postgresql_ip" {
 }
 
 output "secret_keys" {
-  value = module.postgresql.secret_keys
+  value     = module.postgresql.secret_keys
   sensitive = true
 }

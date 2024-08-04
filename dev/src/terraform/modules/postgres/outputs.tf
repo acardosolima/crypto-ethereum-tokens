@@ -4,6 +4,6 @@ output "postgresql_cluster_ip" {
 }
 
 output "secret_keys" {
-  value = data.kubernetes_secret.postgresql.data
+  value     = data.kubernetes_secret.postgresql.data
   sensitive = true
 }

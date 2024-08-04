@@ -15,8 +15,8 @@ resource "helm_release" "postgresql" {
 
   values = [file("${path.module}/postgres-values.yaml")]
 
-  set{
-    name = "global.postgresql.postgresqlDatabase"
+  set {
+    name  = "global.postgresql.postgresqlDatabase"
     value = var.db_name
   }
 
@@ -35,7 +35,7 @@ data "kubernetes_service" "postgresql" {
     namespace = helm_release.postgresql.namespace
   }
 
-  depends_on = [ helm_release.postgresql ]
+  depends_on = [helm_release.postgresql]
 }
 
 # 
