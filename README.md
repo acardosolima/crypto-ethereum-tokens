@@ -107,9 +107,9 @@ Port: 5432
 
 ### access database
 export POSTGRES_PASSWORD=$(kubectl get secret --namespace postgresql postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)
-kubectl port-forward --namespace teste svc/postgresql-1722793652 5432:5432 & PGPASSWORD="$POSTGRES_PASSWORD" psql --host 127.0.0.1 -U postgres -d postgres -p 5432
+kubectl port-forward --namespace postgresql svc/postgresql 5432:5432 & PGPASSWORD="$POSTGRES_PASSWORD" psql --host 127.0.0.1 -U postgres -d postgres -p 5432
 
-kubectl run postgresql-1722793652-client --rm --tty -i --restart='Never' --namespace teste --image docker.io/bitnami/postgresql:16.3.0-debian-12-r23 --env="PGPASSWORD=$POSTGRES_PASSWORD" \
+kubectl run postgresql-1722793652-client --rm --tty -i --restart='Never' --namespace postgresql --image docker.io/bitnami/postgresql:16.3.0-debian-12-r23 --env="PGPASSWORD=$POSTGRES_PASSWORD" \
   --command -- psql --host postgresql -U postgres -d postgres -p 5432
 
 ## Contributors

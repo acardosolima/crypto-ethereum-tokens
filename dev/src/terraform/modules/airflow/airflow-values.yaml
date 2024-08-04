@@ -17,10 +17,11 @@ dags:
 
   gitSync:
     enabled: true
-    repo: https://github.com/acardosolima/st-contratos-eth.git
-    branch: master
-    subPath: ""
+    repo: https://github.com/acardosolima/crypto-ethereum-tokens.git
+    branch: [develop, master]
+    subPath: "dev\src\airflow\dags\"
     period: 20s
+
 
 # Job configurations
 createUserJob:
