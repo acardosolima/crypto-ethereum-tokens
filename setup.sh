@@ -1,6 +1,6 @@
 #! /bin/bash
 
-TERRAFORM_DIR="dev/src/terraform/"
+TERRAFORM_DIR="prod/src/terraform/"
 DESTROY_FLAG=$1
 
 # Check if minikube is running and if not, start the cluster

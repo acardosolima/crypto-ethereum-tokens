@@ -73,6 +73,10 @@ minikube status
 ```
 terraform -version
 ```
+4. Install [Helm](https://helm.sh/docs/intro/install/) and check if it's available
+```
+helm version
+```
 
 ### Local environment setup
 1. Clone repo and install python dependencies within virtual environment
@@ -92,18 +96,18 @@ source setup.sh
 In the UI interface, go to **Admin > Connections > +** and add two connections configs, one for Bigquery and another for Postgres
 
 #### BigQuery
-Connection Id = 'bigquery_credentials'
-Connection Type  = Google Bigquery
-Keyfile JSON = Paste the content of json secret key generated in [step 1.6](#json_key)
+- Connection Id = 'bigquery_credentials'
+- Connection Type  = Google Bigquery
+- Keyfile JSON = Paste the content of json secret key generated in [step 1.6](#json_key)
 
 #### PostgreSQL
-Connection Id = postgres_credentials
-Connection Type = Postgres
-Host: Paste IP address printed in the end of *setup.sh* script
-Database: crypto_ethereum
-Login: postgres
-Password: Paste the output of $POSTGRES_PASSWORD environment variable
-Port: 5432
+- Connection Id = postgres_credentials
+- Connection Type = Postgres
+- Host: Paste IP address printed in the end of *setup.sh* script
+- Database: crypto_ethereum
+- Login: postgres
+- Password: Paste the output of $POSTGRES_PASSWORD environment variable
+- Port: 5432
 
 
 ### Validation process
