@@ -27,7 +27,7 @@ jobs:
 
     - name: Run tests
       run: |
-        coverage run -m pytest dev/tests
+        coverage run -m pytest dev/tests prod/tests
 
   run-linters:
     name: Run linters
@@ -48,6 +48,4 @@ jobs:
           pip install flake8
 
       - name: Run linters
-        uses: wearerequired/lint-action@v2
-        with:
-          flake8: true
+        uses: py-actions/flake8@v2
