@@ -16,11 +16,6 @@ resource "helm_release" "postgresql" {
   values = [file("${path.module}/postgres-values.yaml")]
 
   set {
-    name  = "global.postgresql.postgresqlDatabase"
-    value = var.db_name
-  }
-
-  set {
     name  = "replicaCount"
     value = var.num_replicas
   }

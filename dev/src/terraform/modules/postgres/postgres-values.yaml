@@ -1,3 +1,8 @@
+global:
+  postgresql:
+    auth:
+      database: "crypto_ethereum"
+
 primary:
   resources:
     requests:

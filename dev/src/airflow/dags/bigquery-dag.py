@@ -1,4 +1,4 @@
-import pandas as pd
+from pandas import DataFrame
 from datetime import timedelta, datetime
 from airflow import DAG
 from airflow.operators.python import PythonOperator
@@ -6,41 +6,37 @@ from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
 
 
-
-default_args = {
-    'owner': 'Data Engineer',
-    'depends_on_past': False,
-    'start_date': datetime(2024, 8, 1),
-    'retries': 2,
-    'retry_delay': timedelta(minutes=1),
-}
-
 dag = DAG(
     'Bigquery-Postgres-dag',
+    owner= 'Data Engineer',
     description='Ingest data from bigquery-public-data.crypto_ethereum.tokens to PostgreSQL',
-    default_args=default_args,
     schedule_interval='@daily',
-    catchup=False,
-    max_active_runs=1,
-    max_active_tasks=1
+    depends_on_past= False,
+    start_date= datetime(2024, 8, 4),
+    catchup=True,
+    retries= 2,
+    retry_delay= timedelta(minutes=5)
 )
 
 def query_tokens_table(**kwargs):    
-    execution_date = kwargs['execution_date']
-    d_minus_one = execution_date + timedelta(days=-1)
-    d_minus_one = d_minus_one.strftime('%Y-%m-%d %H:%M:%S')
+    execution_date = kwargs['data_interval_start'] 
+    beg_date = execution_date.replace(hour=0, minute=0, second=0, microsecond=0)
+    end_date = beg_date.replace(hour=0, minute=0, second=0, microsecond=0) + timedelta(days=1)
+
+    print(beg_date)
+    print(end_date)
     
     file_path = f"/tmp/query_results_{execution_date.strftime('%Y%m%d%H%M')}.csv"
 
     hook = BigQueryHook(gcp_conn_id='bigquery_credentials', use_legacy_sql=True)
     conn = hook.get_conn()
     cursor = conn.cursor()
-    cursor.execute(f'SELECT * FROM [bigquery-public-data.crypto_ethereum.tokens] WHERE block_timestamp > "{d_minus_one}"')
+    cursor.execute(f"SELECT * FROM [bigquery-public-data.crypto_ethereum.tokens] WHERE block_timestamp >= '{beg_date}' and block_timestamp < '{end_date}';")
     rows = cursor.fetchall()
     
-    df = pd.DataFrame(rows)
-    df.to_csv(file_path, index=False)
-    
+    df = DataFrame(rows)
+    df.to_csv(file_path, index=False, header=False)
+
     return file_path
 
 def save_to_postgres(**kwargs):
@@ -76,3 +72,5 @@ save_task = PythonOperator(
     provide_context=True,
     dag=dag,
 )
+
+fetch_task >> save_task
