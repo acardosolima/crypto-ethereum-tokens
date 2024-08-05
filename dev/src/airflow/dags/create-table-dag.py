@@ -14,7 +14,7 @@ dag = DAG(
     schedule_interval=None,
     start_date= datetime(2024, 8, 5),
     catchup=False,
-    default_args=default_args
+    default_args=default_args,
     max_active_runs=1,
     max_active_tasks=1
 )
