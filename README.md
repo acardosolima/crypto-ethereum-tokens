@@ -19,9 +19,9 @@ Table: tokens
       - [BigQuery](#bigquery)
       - [PostgreSQL](#postgresql)
     - [Validation process](#validation-process)
-        - [Pre processing](#pre-processing)
-        - [Single execution](#single-execution)
-        - [Backfill](#backfill)
+      - [Pre processing](#pre-processing)
+      - [Single execution](#single-execution)
+      - [Backfill](#backfill)
   - [Contributors](#contributors)
 
 
@@ -108,16 +108,16 @@ Port: 5432
 
 ### Validation process
 
-##### Pre processing
+#### Pre processing
 Table had no rows
 ![1](https://github.com/user-attachments/assets/26a0576b-eddf-4035-a10d-46f18e141d76)
 
-##### Single execution
+#### Single execution
 Inserted data for a single day
 ![2](https://github.com/user-attachments/assets/f0ec01e8-df14-4827-afae-47846a8b5776)
 ![3](https://github.com/user-attachments/assets/876e4479-4244-448d-86b1-745463a5ff48)
 
-##### Backfill
+#### Backfill
 Executed backfill process considering the last 7 days
 ![4](https://github.com/user-attachments/assets/860f866f-fcc4-4e53-8966-d65ac7441dab)
 ![6](https://github.com/user-attachments/assets/84f1744c-8552-43a0-b9df-8b98252b58dd)
