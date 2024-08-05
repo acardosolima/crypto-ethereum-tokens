@@ -1,6 +1,7 @@
-provider "local" {}
+module "postgresql" {
+  source = "./modules/postgres"
+}
 
-resource "local_file" "test" {
-  filename = "test.txt"
-  content  = "test file"
+module "airflow" {
+  source = "./modules/airflow"
 }
