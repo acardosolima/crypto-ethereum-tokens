@@ -8,7 +8,6 @@ from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
 
 dag = DAG(
     'Bigquery-Postgres-dag',
-    owner= 'Data Engineer',
     description='Ingest data from bigquery-public-data.crypto_ethereum.tokens to PostgreSQL',
     schedule_interval='@daily',
     start_date= datetime(2024, 8, 4),

@@ -7,7 +7,6 @@ from datetime import datetime
 dag = DAG(
     'Create-Table-dag',
     description='Create table to insert tokens data',
-    owner= 'Data Engineer',
     schedule_interval=None,
     start_date= datetime(2024, 8, 5),
     catchup=False,

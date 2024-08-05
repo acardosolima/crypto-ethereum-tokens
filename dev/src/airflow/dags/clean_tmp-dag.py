@@ -5,7 +5,6 @@ from datetime import datetime, timedelta
 
 dag = DAG(
     'Clean-Temp-folder',
-    owner= 'Data Engineer',
     description='Clean temp folder used to persist data retrieved from BigQuery',
     schedule_interval=timedelta(weeks=1),
     start_date=datetime(2024, 8, 5),
