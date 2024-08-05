@@ -73,6 +73,10 @@ minikube status
 ```
 terraform -version
 ```
+4. Install [Helm](https://helm.sh/docs/intro/install/) and check if it's available
+```
+helm version
+```
 
 ### Local environment setup
 1. Clone repo and install python dependencies within virtual environment
