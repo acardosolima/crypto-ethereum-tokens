@@ -1,13 +1,4 @@
-# # Airflow executor
-# # One of: LocalExecutor, LocalKubernetesExecutor, CeleryExecutor, KubernetesExecutor, CeleryKubernetesExecutor
-# # executor: "CeleryExecutor"
-
-# # Airflow database & redis config
-# # data:
-# #   # If secret names are provided, use those secrets
-# #   metadataSecretName: airflow-postgresql-secret
-
-# Flask secret key for Airflow Webserver: `[webserver] secret_key` in airflow.cfg
+# Server secret (dismiss the UI warning message)
 webserverSecretKey: webserver-secret-key
 
 # Git sync
@@ -18,12 +9,12 @@ dags:
   gitSync:
     enabled: true
     repo: https://github.com/acardosolima/crypto-ethereum-tokens.git
-    branch: [develop, master]
-    subPath: "dev\src\airflow\dags\"
+    branch: develop
+    subPath: "dev/src/airflow/dags/"
     period: 20s
 
-
 # Job configurations
+# Reference: https://airflow.apache.org/docs/helm-chart/stable/index.html#installing-the-chart-with-argo-cd-flux-rancher-or-terraform
 createUserJob:
   useHelmHooks: false
   applyCustomEnv: false
