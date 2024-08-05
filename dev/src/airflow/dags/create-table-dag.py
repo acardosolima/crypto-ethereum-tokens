@@ -6,7 +6,7 @@ from datetime import datetime
 default_args = {
     'owner': 'Data Engineer',
     'depends_on_past': False,
-    'start_date': datetime(2024, 8, 1),
+    'start_date': datetime(2024, 8, 5),
     'retries': 0
 }
 
@@ -27,16 +27,16 @@ def create_table_postgres(**kwargs):
     cursor = pg_conn.cursor()
 
     create_table_sql = """
-        CREATE TABLE tokens (
-            address TEXT NOT NULL,
+        CREATE TABLE IF NOT EXISTS tokens (
+            address TEXT,
             symbol TEXT,
             name TEXT,
-            decimals INTEGER,
-            total_supply BIGINT,
-            block_timestamp TIMESTAMP NOT NULL,
-            block_number BIGINT,
-            block_hash TEXT NOT NULL,
-            CONSTRAINT unique_address_block_hash UNIQUE (address, block_hash)
+            decimals INTEGER DEFAULT 0,
+            total_supply TEXT,
+            block_timestamp TEXT,
+            block_number TEXT,
+            block_hash TEXT,
+            CONSTRAINT unique_address_block_hash UNIQUE (address, block_timestamp, block_hash)
         );
     """
 
