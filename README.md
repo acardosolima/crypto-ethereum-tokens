@@ -18,7 +18,10 @@ Table: tokens
     - [Configure airflow connections](#configure-airflow-connections)
       - [BigQuery](#bigquery)
       - [PostgreSQL](#postgresql)
-    - [access database](#access-database)
+    - [Validation process](#validation-process)
+      - [Pre processing](#pre-processing)
+      - [Single execution](#single-execution)
+      - [Backfill](#backfill)
   - [Contributors](#contributors)
 
 
@@ -42,15 +45,16 @@ export PROJECT_ID=$(gcloud config get-value core/project)
 ```
 gcloud iam service-accounts create python-bigquery-sa --display-name "bigquery sa for crypto-ethereum project"
 ```
-6. Create JSON access key for the service account
+<a id="json_key"></a>
+6. Create JSON access key for the service account 
 ```
 gcloud iam service-accounts keys create ~/key.json --iam-account python-bigquery-sa@${PROJECT_ID}.iam.gserviceaccount.com
 ```
-7. Create environment variable with key location
+<!-- 7. Create environment variable with key location
 ```
 export GOOGLE_APPLICATION_CREDENTIALS=~/key.json
-```
-8. Add IAM roles to access Bigquery datasets
+``` -->
+7. Add IAM roles to access Bigquery datasets
 ```
 gcloud projects add-iam-policy-binding ${PROJECT_ID} --member "serviceAccount:python-bigquery-sa@${PROJECT_ID}.iam.gserviceaccount.com" --role "roles/bigquery.user"
 ```
@@ -61,9 +65,9 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} --member "serviceAccount:py
 ```
 docker --version
 ```
-2. Install [Minikube](https://k8s-docs.netlify.app/en/docs/tasks/tools/install-minikube/) and start local cluster
+2. Install [Minikube](https://k8s-docs.netlify.app/en/docs/tasks/tools/install-minikube/) and check if it's working
 ```
-minikube start
+minikube status
 ```
 3. Install [Terraform](https://developer.hashicorp.com/terraform/install) and check if it's available
 ```
@@ -79,38 +83,45 @@ python -m venv .env
 source .env/Scripts\activate
 pip install -r requirements.txt
 ```
-1. Execute setup.sh to initialize both postgres and airflow deployment
+2. Execute setup.sh to initialize both postgres and airflow deployment.
 ```
 source setup.sh
 ```
+
 ### Configure airflow connections
-```
-kubectl port-forward svc/airflow-webserver 8080:8080 -n airflow
-```
+In the UI interface, go to **Admin > Connections > +** and add two connections configs, one for Bigquery and another for Postgres
 
 #### BigQuery
-Admin > Connections > +
-Connection Id = bigquery_credentials
+Connection Id = 'bigquery_credentials'
 Connection Type  = Google Bigquery
-Keyfile JSON
+Keyfile JSON = Paste the content of json secret key generated in [step 1.6](#json_key)
 
 #### PostgreSQL
-Admin > Connections > +
 Connection Id = postgres_credentials
 Connection Type = Postgres
-Host: output of terraform apply
+Host: Paste IP address printed in the end of *setup.sh* script
 Database: crypto_ethereum
 Login: postgres
-Password: output of POSTGRES_PASSWORD env var
+Password: Paste the output of $POSTGRES_PASSWORD environment variable
 Port: 5432
 
 
-### access database
-export POSTGRES_PASSWORD=$(kubectl get secret --namespace postgresql postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)
-kubectl port-forward --namespace postgresql svc/postgresql 5432:5432 & PGPASSWORD="$POSTGRES_PASSWORD" psql --host 127.0.0.1 -U postgres -d postgres -p 5432
+### Validation process
 
-kubectl run postgresql-1722793652-client --rm --tty -i --restart='Never' --namespace postgresql --image docker.io/bitnami/postgresql:16.3.0-debian-12-r23 --env="PGPASSWORD=$POSTGRES_PASSWORD" \
-  --command -- psql --host postgresql -U postgres -d postgres -p 5432
+#### Pre processing
+Table had no rows
+![1](https://github.com/user-attachments/assets/26a0576b-eddf-4035-a10d-46f18e141d76)
+
+#### Single execution
+Inserted data for a single day
+![2](https://github.com/user-attachments/assets/f0ec01e8-df14-4827-afae-47846a8b5776)
+![3](https://github.com/user-attachments/assets/876e4479-4244-448d-86b1-745463a5ff48)
+
+#### Backfill
+Executed backfill process considering the last 7 days
+![4](https://github.com/user-attachments/assets/860f866f-fcc4-4e53-8966-d65ac7441dab)
+![6](https://github.com/user-attachments/assets/84f1744c-8552-43a0-b9df-8b98252b58dd)
+
 
 ## Contributors
 - [Adriano C. Lima](mailto:adrianocardoso1991@gmail.com)
