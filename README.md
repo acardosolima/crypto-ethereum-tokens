@@ -13,7 +13,12 @@ Table: tokens
   - [Table of contents](#table-of-contents)
   - [Setting up](#setting-up)
     - [Google Cloud setup](#google-cloud-setup)
+    - [Install required programs](#install-required-programs)
     - [Local environment setup](#local-environment-setup)
+    - [Configure airflow connections](#configure-airflow-connections)
+      - [BigQuery](#bigquery)
+      - [PostgreSQL](#postgresql)
+    - [access database](#access-database)
   - [Contributors](#contributors)
 
 
@@ -51,7 +56,7 @@ gcloud projects add-iam-policy-binding ${PROJECT_ID} --member "serviceAccount:py
 ```
 
 
-### Local environment setup
+### Install required programs
 1. Install [Docker Engine](https://docs.docker.com/engine/install/) and check if it is running
 ```
 docker --version
@@ -60,12 +65,52 @@ docker --version
 ```
 minikube start
 ```
-3. Execute installAll.sh to initialize both postgres and airflow deployment **use terragrunt maybe?**
+3. Install [Terraform](https://developer.hashicorp.com/terraform/install) and check if it's available
 ```
-bash installAll.sh    # If using Windows
-source installAll.sh  # if using Linux
+terraform -version
 ```
 
+### Local environment setup
+1. Clone repo and install python dependencies within virtual environment
+```
+git clone https://github.com/acardosolima/crypto-ethereum-tokens.git
+cd crypto-ethereum-tokens/
+python -m venv .env
+source .env/Scripts\activate
+pip install -r requirements.txt
+```
+1. Execute setup.sh to initialize both postgres and airflow deployment
+```
+source setup.sh
+```
+### Configure airflow connections
+```
+kubectl port-forward svc/airflow-webserver 8080:8080 -n airflow
+```
+
+#### BigQuery
+Admin > Connections > +
+Connection Id = bigquery_credentials
+Connection Type  = Google Bigquery
+Keyfile JSON
+
+#### PostgreSQL
+Admin > Connections > +
+Connection Id = postgres_credentials
+Connection Type = Postgres
+Host: output of terraform apply
+Database: crypto_ethereum
+Login: postgres
+Password: output of POSTGRES_PASSWORD env var
+Port: 5432
+
+
+### access database
+export POSTGRES_PASSWORD=$(kubectl get secret --namespace postgresql postgresql -o jsonpath="{.data.postgres-password}" | base64 -d)
+kubectl port-forward --namespace postgresql svc/postgresql 5432:5432 & PGPASSWORD="$POSTGRES_PASSWORD" psql --host 127.0.0.1 -U postgres -d postgres -p 5432
+
+kubectl run postgresql-1722793652-client --rm --tty -i --restart='Never' --namespace postgresql --image docker.io/bitnami/postgresql:16.3.0-debian-12-r23 --env="PGPASSWORD=$POSTGRES_PASSWORD" \
+  --command -- psql --host postgresql -U postgres -d postgres -p 5432
 
 ## Contributors
 - [Adriano C. Lima](mailto:adrianocardoso1991@gmail.com)

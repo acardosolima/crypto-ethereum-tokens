@@ -15,6 +15,16 @@ resource "helm_release" "postgresql" {
 
   values = [file("${path.module}/postgres-values.yaml")]
 
+  set {
+    name  = "global.postgresql.postgresqlDatabase"
+    value = var.db_name
+  }
+
+  set {
+    name  = "replicaCount"
+    value = var.num_replicas
+  }
+
   depends_on = [kubernetes_namespace.postgresql]
 }
 
@@ -23,5 +33,15 @@ data "kubernetes_service" "postgresql" {
   metadata {
     name      = helm_release.postgresql.name
     namespace = helm_release.postgresql.namespace
+  }
+
+  depends_on = [helm_release.postgresql]
+}
+
+# 
+data "kubernetes_secret" "postgresql" {
+  metadata {
+    name      = "postgresql"
+    namespace = kubernetes_namespace.postgresql.metadata[0].name
   }
 }
