@@ -3,15 +3,18 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from datetime import datetime
 
+default_args = {
+    "owner": "Data Engineer",
+    "retries": 0
+}
 
 dag = DAG(
     'Create-Table-dag',
     description='Create table to insert tokens data',
-    owner= 'Data Engineer',
     schedule_interval=None,
     start_date= datetime(2024, 8, 5),
     catchup=False,
-    retries= 0,
+    default_args=default_args,
     max_active_runs=1,
     max_active_tasks=1
 )
