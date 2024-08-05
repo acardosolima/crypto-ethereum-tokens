@@ -22,6 +22,6 @@ dag = DAG(
 
 clean_temp_folder = BashOperator(
     task_id='clean_temp_task',
-    bash_command='rm -r /tmp/query_*.json',
+    bash_command='rm -rf /tmp/query_*',
     dag=dag,
 )
