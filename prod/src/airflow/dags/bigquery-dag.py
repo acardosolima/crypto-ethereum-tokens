@@ -5,16 +5,19 @@ from airflow.operators.python import PythonOperator
 from airflow.providers.postgres.hooks.postgres import PostgresHook
 from airflow.providers.google.cloud.hooks.bigquery import BigQueryHook
 
+default_args = {
+    "owner": "Data Engineer",
+    "retries": 2,
+    "retry_delay": timedelta(minutes=5)
+}
 
 dag = DAG(
     'Bigquery-Postgres-dag',
-    owner= 'Data Engineer',
     description='Ingest data from bigquery-public-data.crypto_ethereum.tokens to PostgreSQL',
     schedule_interval='@daily',
     start_date= datetime(2024, 8, 4),
     catchup=True,
-    retries= 2,
-    retry_delay= timedelta(minutes=5)
+    default_args=default_args
 )
 
 def query_tokens_table(**kwargs):
