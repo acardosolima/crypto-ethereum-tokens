@@ -1,0 +1,24 @@
+# Server secret (dismiss the UI warning message)
+webserverSecretKey: webserver-secret-key
+
+# Git sync
+dags:
+  persistence:
+    enabled: false
+
+  gitSync:
+    enabled: true
+    repo: https://github.com/acardosolima/crypto-ethereum-tokens.git
+    branch: master
+    subPath: "prod/src/airflow/dags/"
+    period: 10s
+
+# Job configurations
+# Reference: https://airflow.apache.org/docs/helm-chart/stable/index.html#installing-the-chart-with-argo-cd-flux-rancher-or-terraform
+createUserJob:
+  useHelmHooks: false
+  applyCustomEnv: false
+
+migrateDatabaseJob:
+  useHelmHooks: false
+  applyCustomEnv: false
