@@ -1,0 +1,22 @@
+global:
+  postgresql:
+    auth:
+      database: "crypto_ethereum"
+
+primary:
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 375m
+      memory: 384Mi
+
+readReplicas:
+  resources:
+    requests:
+      cpu: 250m
+      memory: 256Mi
+    limits:
+      cpu: 375m
+      memory: 384Mi

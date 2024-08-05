@@ -13,7 +13,15 @@ Table: tokens
   - [Table of contents](#table-of-contents)
   - [Setting up](#setting-up)
     - [Google Cloud setup](#google-cloud-setup)
+    - [Install required programs](#install-required-programs)
     - [Local environment setup](#local-environment-setup)
+    - [Configure airflow connections](#configure-airflow-connections)
+      - [BigQuery](#bigquery)
+      - [PostgreSQL](#postgresql)
+    - [Validation process](#validation-process)
+      - [Pre processing](#pre-processing)
+      - [Single execution](#single-execution)
+      - [Backfill](#backfill)
   - [Contributors](#contributors)
 
 
@@ -37,34 +45,86 @@ export PROJECT_ID=$(gcloud config get-value core/project)
 ```
 gcloud iam service-accounts create python-bigquery-sa --display-name "bigquery sa for crypto-ethereum project"
 ```
-6. Create JSON access key for the service account
+<a id="json_key"></a>
+6. Create JSON access key for the service account 
 ```
 gcloud iam service-accounts keys create ~/key.json --iam-account python-bigquery-sa@${PROJECT_ID}.iam.gserviceaccount.com
 ```
-7. Create environment variable with key location
+<!-- 7. Create environment variable with key location
 ```
 export GOOGLE_APPLICATION_CREDENTIALS=~/key.json
-```
-8. Add IAM roles to access Bigquery datasets
+``` -->
+7. Add IAM roles to access Bigquery datasets
 ```
 gcloud projects add-iam-policy-binding ${PROJECT_ID} --member "serviceAccount:python-bigquery-sa@${PROJECT_ID}.iam.gserviceaccount.com" --role "roles/bigquery.user"
 ```
 
 
-### Local environment setup
+### Install required programs
 1. Install [Docker Engine](https://docs.docker.com/engine/install/) and check if it is running
 ```
 docker --version
 ```
-2. Install [Minikube](https://k8s-docs.netlify.app/en/docs/tasks/tools/install-minikube/) and start local cluster
+2. Install [Minikube](https://k8s-docs.netlify.app/en/docs/tasks/tools/install-minikube/) and check if it's working
 ```
-minikube start
+minikube status
 ```
-3. Execute installAll.sh to initialize both postgres and airflow deployment **use terragrunt maybe?**
+3. Install [Terraform](https://developer.hashicorp.com/terraform/install) and check if it's available
 ```
-bash installAll.sh    # If using Windows
-source installAll.sh  # if using Linux
+terraform -version
 ```
+4. Install [Helm](https://helm.sh/docs/intro/install/) and check if it's available
+```
+helm version
+```
+
+### Local environment setup
+1. Clone repo and install python dependencies within virtual environment
+```
+git clone https://github.com/acardosolima/crypto-ethereum-tokens.git
+cd crypto-ethereum-tokens/
+python -m venv .env
+source .env/Scripts\activate
+pip install -r requirements.txt
+```
+2. Execute setup.sh to initialize both postgres and airflow deployment.
+```
+source setup.sh
+```
+
+### Configure airflow connections
+In the UI interface, go to **Admin > Connections > +** and add two connections configs, one for Bigquery and another for Postgres
+
+#### BigQuery
+- Connection Id = 'bigquery_credentials'
+- Connection Type  = Google Bigquery
+- Keyfile JSON = Paste the content of json secret key generated in [step 1.6](#json_key)
+
+#### PostgreSQL
+- Connection Id = postgres_credentials
+- Connection Type = Postgres
+- Host: Paste IP address printed in the end of *setup.sh* script
+- Database: crypto_ethereum
+- Login: postgres
+- Password: Paste the output of $POSTGRES_PASSWORD environment variable
+- Port: 5432
+
+
+### Validation process
+
+#### Pre processing
+Table had no rows
+![1](https://github.com/user-attachments/assets/26a0576b-eddf-4035-a10d-46f18e141d76)
+
+#### Single execution
+Inserted data for a single day
+![2](https://github.com/user-attachments/assets/f0ec01e8-df14-4827-afae-47846a8b5776)
+![3](https://github.com/user-attachments/assets/876e4479-4244-448d-86b1-745463a5ff48)
+
+#### Backfill
+Executed backfill process considering the last 7 days
+![4](https://github.com/user-attachments/assets/860f866f-fcc4-4e53-8966-d65ac7441dab)
+![6](https://github.com/user-attachments/assets/84f1744c-8552-43a0-b9df-8b98252b58dd)
 
 
 ## Contributors
