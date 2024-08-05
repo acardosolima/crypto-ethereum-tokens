@@ -18,7 +18,8 @@ if [ "$TABLE_EXISTS" != "1" ]; then
 	total_supply TEXT,
 	block_timestamp TIMESTAMP NOT NULL,
 	block_number INTEGER NOT NULL,
-	block_hash TEXT NOT NULL
+	block_hash TEXT NOT NULL,
+	CONSTRAINT unique_address_block_hash UNIQUE (address, block_hash)
     );
   "
   echo "Table $TABLE_NAME created."

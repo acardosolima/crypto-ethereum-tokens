@@ -18,16 +18,10 @@ dags:
   gitSync:
     enabled: true
     repo: https://github.com/acardosolima/crypto-ethereum-tokens.git
-<<<<<<< HEAD
-    branch: develop
-    subPath: ""
-    period: 60s
-=======
     branch: [develop, master]
     subPath: "dev\src\airflow\dags\"
     period: 20s
 
->>>>>>> feat/add_dag_develop_gitsync
 
 # Job configurations
 createUserJob:
