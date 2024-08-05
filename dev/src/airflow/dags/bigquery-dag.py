@@ -11,7 +11,6 @@ dag = DAG(
     owner= 'Data Engineer',
     description='Ingest data from bigquery-public-data.crypto_ethereum.tokens to PostgreSQL',
     schedule_interval='@daily',
-    depends_on_past= False,
     start_date= datetime(2024, 8, 4),
     catchup=True,
     retries= 2,
