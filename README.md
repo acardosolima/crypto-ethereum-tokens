@@ -103,6 +103,11 @@ Database: crypto_ethereum
 Login: postgres
 Password: output of POSTGRES_PASSWORD env var
 Port: 5432
+![1](https://github.com/user-attachments/assets/26a0576b-eddf-4035-a10d-46f18e141d76)
+![2](https://github.com/user-attachments/assets/f0ec01e8-df14-4827-afae-47846a8b5776)
+![3](https://github.com/user-attachments/assets/876e4479-4244-448d-86b1-745463a5ff48)
+![4](https://github.com/user-attachments/assets/860f866f-fcc4-4e53-8966-d65ac7441dab)
+![6](https://github.com/user-attachments/assets/84f1744c-8552-43a0-b9df-8b98252b58dd)
 
 
 ### access database
